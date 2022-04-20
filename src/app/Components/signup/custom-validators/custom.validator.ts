@@ -1,23 +1,19 @@
 import {
     AbstractControl,
     ValidatorFn,
-    FormControl,
-    FormGroup,
     ValidationErrors
   } from '@angular/forms';
+
 
 export interface ValidationResult {
     [key: string]: boolean;
 }
-
-export class PasswordValidator {
+export class CustomValidator {
     static strong() {
       return (control: AbstractControl): ValidationErrors | null  => {
         let hasNumber = /\d/.test(control.value);
         let hasUpper = /[A-Z]/.test(control.value);
         let hasLower = /[a-z]/.test(control.value);
-        // console.log('Num, Upp, Low', hasNumber, hasUpper, hasLower);
-        const valid = hasNumber && hasUpper && hasLower;
         if(!hasNumber){
             return {
                 numberError: true
@@ -31,10 +27,6 @@ export class PasswordValidator {
         if(!hasLower){
             return { lowerError: true}
         }
-        // if (!valid) {
-        //     // return what´s not valid
-        //     return { strong: true };
-        // }
         return null;
       };
 }
@@ -55,6 +47,17 @@ static match(controlName: string, checkControlName: string): ValidatorFn {
       } else {
         return null;
       }
+    };
+  }
+
+  static atleastOne(controlName: string, checkControlName: string): ValidatorFn {
+    return (controls: AbstractControl) => {
+      const control = controls.get(controlName);
+      const checkControl = controls.get(checkControlName);
+      if (control?.value || checkControl?.value) {
+        return null;      
+      }
+      return { atleastOne: true }; 
     };
   }
 }

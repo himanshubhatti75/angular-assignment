@@ -1,6 +1,7 @@
+
 <h1>Signup Page</h1>
 <form class="example-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-    <mat-form-field class="example-full-width" appearance="fill">
+    <mat-form-field  appearance="fill">
         <mat-label>FirstName</mat-label>
         <input formControlName="firstName"  matInput  
                placeholder="ex. Joe">
@@ -13,7 +14,7 @@
           </div>
         </div>
      
-      <mat-form-field class="example-full-width" appearance="fill">
+      <mat-form-field  appearance="fill">
         <mat-label>LastName</mat-label>
         <input formControlName="lastName"   matInput  
                placeholder="ex. Biden">
@@ -25,7 +26,7 @@
             Last Name is required.
           </div>
         </div>
-    <mat-form-field class="example-full-width" appearance="fill">
+    <mat-form-field  appearance="fill">
       <mat-label>Email</mat-label>
       <input formControlName="email"  type="email" matInput  
              placeholder="ex. john@mail.com">
@@ -40,7 +41,7 @@
             Invalid email
           </div>
         </div>
-    <mat-form-field class="example-full-width" appearance="fill">
+    <mat-form-field  appearance="fill">
         <mat-label>password</mat-label>
         <input formControlName="password" type="password" matInput  
                placeholder="add password">
@@ -61,7 +62,7 @@
             password must contain atleast one lowercase case albhabet
           </div>
         </div>
-      <mat-form-field class="example-full-width" appearance="fill">
+      <mat-form-field  appearance="fill">
         <mat-label> confirm password</mat-label>
         <input formControlName="confirmPassword" type="password" matInput  
                placeholder="confirm password">
@@ -78,7 +79,7 @@
           </div>
          
         </div>
-      <mat-form-field class="example-full-width" appearance="fill">
+      <mat-form-field  appearance="fill">
         <mat-label>website</mat-label>
         <input formControlName="website"  matInput  
                placeholder="Enter your website">
@@ -89,9 +90,12 @@
           <div *ngIf="website?.errors?.['required']" class="error">
             website is required.
           </div>
+          <div *ngIf="website?.errors?.['pattern']" class="error">
+            website is not valid
+          </div>
         </div>
       <h4>Colleges</h4>
-<mat-form-field appearance="fill">
+<mat-form-field  appearance="fill">
   <mat-label>Colleges</mat-label>
   <mat-select formControlName="college"> 
     <mat-option *ngFor="let college of colleges" [value]="college.value" >
@@ -108,15 +112,22 @@
         </div>
 
     <h4>Strengths</h4>
-    <section>
-        <mat-checkbox class="example-margin" formControlName="smartWork">Smart work</mat-checkbox>
-        <mat-checkbox class="example-margin" formControlName="fastLearning">Fast Learning</mat-checkbox>
-</section>
-<mat-radio-group  aria-label="Gender"  formControlName="gender">
+    <div class="field flex-wrap">
+        <mat-checkbox  formControlName="smartWork">Smart work</mat-checkbox>
+        <mat-checkbox  formControlName="fastLearning">Fast Learning</mat-checkbox>
+</div>
+<div *ngIf="smartWork?.invalid && (smartWork?.dirty || smartWork?.touched)"
+            class="alert alert-danger">
+        
+          <div *ngIf="smartWork?.errors?.['atleastOne']" class="error">
+            Atleast one Strength required!
+          </div>
+        </div>
+<mat-radio-group class="field flex-wrap"  aria-label="Gender"  formControlName="gender">
     <mat-radio-button value="m">Male</mat-radio-button>
     <mat-radio-button value="f">Female</mat-radio-button>
   </mat-radio-group>
-  <mat-form-field class="example-full-width" appearance="fill">
+  <mat-form-field  appearance="fill">
     <mat-label>About me area</mat-label>
     <textarea formControlName="aboutUs" matInput placeholder="Ex. It makes me feel..."></textarea>
   </mat-form-field>
@@ -127,7 +138,7 @@
             about Us is required.
           </div>
         </div>
-        <mat-form-field appearance="fill">
+        <mat-form-field class="field" appearance="fill">
           <mat-label>Choose a date</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="date" >
           <mat-hint>MM/DD/YYYY</mat-hint>
@@ -142,11 +153,17 @@
       </div>
       
     </div>
-   
-      <mat-label>Upload your photo</mat-label>
-      <input  #fileInput type="file" id="file" formControlName="img" (change)="onFileChange($event)"   >
-      <img *ngIf="previewUrl" src="previewUrl">
-      <div *ngIf="img?.invalid && (img?.dirty || img?.touched)"
+<div class=" upload-container"  >
+  <div class="upload-file-preview-container">
+   <div class="preview-note" *ngIf="!previewUrl; else preview">click on choose file button to upload</div>
+   <ng-template #preview >
+   <img width="auto" height="280px" src={{previewUrl}} alt="selected-image" >
+  </ng-template>
+  </div>
+      <input  class="upload-file" #fileInput type="file" id="file" formControlName="img" (change)="onFileChange($event)"   >
+    </div>
+      
+    <div *ngIf="img?.invalid && (img?.dirty || img?.touched)"
       class="alert alert-danger">
   
     <div *ngIf="img?.errors?.['required']" class="error">

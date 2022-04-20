@@ -3,6 +3,8 @@ import {FormControl,FormGroup, Validators} from '@angular/forms';
 import {LoginInterface} from './interfaces/formInterface';
 import {AuthService} from '../../services/auth.service';
 import { Router } from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import { PopupComponent } from '../common/popup/popup.component';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +13,19 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router) {}
-
+  constructor(private router: Router,
+    private dialogRef: MatDialog,
+    private authService: AuthService) {}
+   
+  openDialog(){
+    this.dialogRef.open(PopupComponent,{
+      data: {
+        title: "Login Error",
+        message: "Account not found try again"
+      }
+    });
+    
+  }
 
   ngOnInit(): void {
   }
@@ -27,26 +40,20 @@ export class LoginComponent implements OnInit {
   get password() { return this.loginForm.get('password'); }
    
   onSubmit(){
-    console.warn(this.loginForm.value);
     const value=this.loginForm.value;
     const usersString=localStorage.getItem('users');
     if(usersString!==null){
-      const users= JSON.parse(usersString);
-    console.log(users);
+      let users= JSON.parse(usersString);
     if(users!==null){
-      console.log(users);
       const found=users.find((o:LoginInterface )=> o.email.toLowerCase() === value.email.toLowerCase() && o.password.toLowerCase()===value.password.toLowerCase());
       if(found){
-        console.log('found');
-        AuthService.login();
+        this.authService.login(found);
         this.router.navigate(['/dashboard']);
       }
       else{
-        console.log(found,'not found');
+        this.openDialog();
       }
      }
   }
-  
   }
-
 }

@@ -1,4 +1,15 @@
+@use '@angular/material' as mat;
+$my-palette: mat.define-palette(mat.$indigo-palette);
+
+.td-email h6{
+  color: mat.get-color-from-palette($my-palette, 'darker');
+}
 table {
     width: 100%;
     min-width: 1024px;
+  }
+
+  .user h6{
+    background-color: mat.get-color-from-palette($my-palette, 'darker');
+    color: mat.get-color-from-palette($my-palette, 'lighter');
   }

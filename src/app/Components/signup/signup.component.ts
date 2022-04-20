@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup,FormControl,Validators } from '@angular/forms';
-import { PasswordValidator } from './custom-validators/password.validator';
+import { CustomValidator } from './custom-validators/custom.validator';
 import {SignupFormInterface} from '../../FormInterface';
 import { Router } from '@angular/router';
 import {AuthService} from '../../services/auth.service';
-
+import {MatDialog} from '@angular/material/dialog';
+import {PopupComponent} from '../common/popup/popup.component';
+import {passwordPattern} from './regx';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -12,7 +14,7 @@ import {AuthService} from '../../services/auth.service';
 })
 
 export class SignupComponent implements OnInit {
-  constructor(private router: Router){}
+  constructor(private router: Router,private dialogRef: MatDialog,private authService: AuthService){}
   previewUrl='';
   colleges=[{
     value: "uiit",
@@ -32,11 +34,11 @@ export class SignupComponent implements OnInit {
     firstName: new FormControl("",[Validators.required]),
     lastName: new FormControl("",[Validators.required]),
     email: new FormControl("",[Validators.required,Validators.email]),
-    password: new FormControl("",[Validators.required,PasswordValidator.strong()]),
+    password: new FormControl("",[Validators.required,CustomValidator.strong()]),
     confirmPassword: new FormControl("",[Validators.required]),
-    website: new FormControl("",[Validators.required]),
+    website: new FormControl("",[Validators.required,Validators.pattern(passwordPattern)]),
     aboutUs: new FormControl("",[Validators.required]),
-    gender: new FormControl("m",[Validators.required]),
+    gender: new FormControl("",[Validators.required]),
     smartWork: new FormControl(false),
     fastLearning: new FormControl(false),
     college: new FormControl("",[Validators.required]),
@@ -44,7 +46,7 @@ export class SignupComponent implements OnInit {
     img: new FormControl(null,[Validators.required]),
     fileSource: new FormControl('', [Validators.required])
   },
-{validators: PasswordValidator.match('password', 'confirmPassword')}
+{validators: [CustomValidator.match('password', 'confirmPassword'),CustomValidator.atleastOne('smartWork', 'fastLearning')]}
   )
   
   get email() { return this.signupForm.get('email'); }
@@ -69,6 +71,7 @@ export class SignupComponent implements OnInit {
       });
       const formData = new FormData();
     formData.append('img', this.signupForm.get('fileSource')?.value);
+    this.preview(event);
     }
   } 
   readURL(file :any){
@@ -87,41 +90,44 @@ export class SignupComponent implements OnInit {
       this.previewUrl = url;
     }
 };
+openDialog(){
+  this.dialogRef.open(PopupComponent,{
+    data: {
+      title: "Signup Error",
+      message: "Account already exists"
+    }
+  });
+}
   onSubmit(){
     const value=this.signupForm.value;
-    var fr = new FileReader();
-    console.log(fr.readAsDataURL(value.fileSource));
-    console.log(value.fileSource);
-    console.log(value);
-    delete value.confirmPassword
-
+    delete value.confirmPassword;
+    delete value.fileSource;
+    value.img=this.previewUrl;
     const usersString=localStorage.getItem('users');
     if(usersString!==null){
       const users= JSON.parse(usersString);
-    console.log(users);
     if(users!==null){
+      users.img=JSON.stringify(this.previewUrl);
       let obj = users.find((o:SignupFormInterface )=> o.email.toLowerCase() === value.email.toLowerCase());
       if(obj){
-        console.log('account already exist');
+        this.openDialog();
         return;
       }
       else{
         users.push(value);
         localStorage.setItem('users',JSON.stringify(users));
-        AuthService.login();
+        this.authService.login(value);
         this.router.navigate(['/dashboard']);
       }
      }
      else{
-      localStorage.setItem('users',JSON.stringify([value]));
-      AuthService.login();
+      this.authService.login(value);
       this.router.navigate(['/dashboard']);
      }
     const lItem=localStorage.getItem('users');
-    if(lItem!==null){console.log(JSON.parse(lItem));}
-    // localStorage.setItem('form',JSON.stringify(value));
-    // const lItem=localStorage.getItem('form');
-    // console.log(JSON.parse(lItem));
+    if(lItem!==null){
+      //item not found!
+    }
     }
   }
  

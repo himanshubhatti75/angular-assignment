@@ -1,62 +1,70 @@
-
+<h2>Data Table</h2>
 <div class="example-header">
   <mat-form-field>
     <input matInput (keyup)="applyFilter($event)" placeholder="Filter">
   </mat-form-field>
 </div>
 
-   Table:
-   <table mat-table [dataSource]="dataSource">
+   <table  mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" >
   <ng-container matColumnDef="email">
-    <th mat-header-cell *matHeaderCellDef> email</th>
-    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    <th mat-header-cell *matHeaderCellDef class="table-header " mat-sort-header sortActionDescription="Sort by email"><p> email</p></th>
+    <td mat-cell *matCellDef="let element" class="td-email" ><h6> {{element.email}}</h6></td>
   </ng-container>
   <ng-container matColumnDef="firstName">
-    <th mat-header-cell *matHeaderCellDef>First Name</th>
-    <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+    <th mat-header-cell *matHeaderCellDef class="table-header" mat-sort-header sortActionDescription="Sort by firstName"><p>First Name</p></th>
+    <td mat-cell *matCellDef="let element"><h6> {{element.firstName}} </h6></td>
   </ng-container>
   <ng-container matColumnDef="lastName">
-    <th mat-header-cell *matHeaderCellDef> Last Name</th>
-    <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+    <th mat-header-cell *matHeaderCellDef class="table-header" mat-sort-header sortActionDescription="Sort by lastName"><p> Last Name</p></th>
+    <td mat-cell *matCellDef="let element"> <h6>{{element.lastName}}</h6> </td>
   </ng-container>
   <ng-container matColumnDef="website">
-    <th mat-header-cell *matHeaderCellDef> website</th>
-    <td mat-cell *matCellDef="let element"> {{element.website}} </td>
+    <th mat-header-cell *matHeaderCellDef class="table-header" mat-sort-header sortActionDescription="Sort by website"> <p>website</p></th>
+    <td mat-cell *matCellDef="let element"> <h6>{{element.website}}</h6> </td>
   </ng-container>
-  <ng-container matColumnDef="gender">
-    <th mat-header-cell *matHeaderCellDef> gender</th>
-    <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+  <ng-container matColumnDef="gender" class="table-header" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gender"> <p>gender</p></th>
+    <td mat-cell *matCellDef="let element"> <h6>{{element.gender}}</h6> </td>
   </ng-container>
-  <ng-container matColumnDef="aboutUs">
-    <th mat-header-cell *matHeaderCellDef> about us</th>
-    <td mat-cell *matCellDef="let element"> {{element.aboutUs}} </td>
+  <ng-container matColumnDef="aboutUs" >
+    <th mat-header-cell *matHeaderCellDef class="table-header" mat-sort-header sortActionDescription="Sort by about us"><p> about us</p></th>
+    <td mat-cell *matCellDef="let element"> <h6>{{element.aboutUs}}</h6> </td>
   </ng-container>
-  <ng-container matColumnDef="smartWork">
-    <th mat-header-cell *matHeaderCellDef> Smart Work</th>
-    <td mat-cell *matCellDef="let element"> {{element.smartWork}} </td>
+  <ng-container matColumnDef="smartWork" >
+    <th mat-header-cell *matHeaderCellDef class="table-header" mat-sort-header sortActionDescription="Sort by smartWork"> <p>Smart Work</p></th>
+    <td mat-cell *matCellDef="let element"><h6> {{element.smartWork}}</h6> </td>
   </ng-container>
-  <ng-container matColumnDef="fastLearning">
-    <th mat-header-cell *matHeaderCellDef> Fast Learning</th>
-    <td mat-cell *matCellDef="let element"> {{element.fastLearning}} </td>
+  <ng-container matColumnDef="fastLearning" class="table-header" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fast learning"> <p>Fast Learning</p></th>
+    <td mat-cell *matCellDef="let element"> <h6>{{element.fastLearning}}</h6> </td>
   </ng-container>
-  <ng-container matColumnDef="college">
-    <th mat-header-cell *matHeaderCellDef> college</th>
-    <td mat-cell *matCellDef="let element"> {{element.college}} </td>
+  <ng-container matColumnDef="college" class="table-header" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by college"><p> college</p></th>
+    <td mat-cell *matCellDef="let element"><h6>{{element.college}}</h6>  </td>
   </ng-container>
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef> date</th>
-    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+  <ng-container matColumnDef="date" class="table-header" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date"><p>date</p> </th>
+    <td mat-cell *matCellDef="let element"><h6>{{element.date}}</h6></td>
   </ng-container>
-  <ng-container matColumnDef="action">
-    <th mat-header-cell *matHeaderCellDef> action</th>
+  <ng-container matColumnDef="action" class="table-header">
+    <th mat-header-cell *matHeaderCellDef> <p>action</p></th>
     <td mat-cell *matCellDef="let element"> 
-    <button (click)="onDelete(element.email)">delete</button>    
+    <button (click)="onDelete(element.email)" mat-raised-button color="warn">delete</button>    
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="img" class="table-header">
+    <th mat-header-cell *matHeaderCellDef> <p>img</p></th>
+    <td mat-cell *matCellDef="let element"> 
+    <img src={{element.img}} width="50px"height="50px" alt={{element.firstName}} />
     </td>
   </ng-container>
  
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  
+
+  <tr
+  mat-row
+  [class.user]="adminRow(row)"
+  *matRowDef="let row; columns: displayedColumns;"
+></tr>
   </table>
   <mat-paginator [pageSizeOptions]="[5, 10,20]" [length]="resultsLength" [pageSize]="5" aria-label="Select page of GitHub search results"></mat-paginator>

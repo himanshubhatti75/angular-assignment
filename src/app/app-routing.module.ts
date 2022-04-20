@@ -11,7 +11,6 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthGuard] },
 ];
 
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

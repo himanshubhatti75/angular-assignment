@@ -21,8 +21,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import { HttpClientModule } from '@angular/common/http';
 import { UsersComponent } from './Components/dashboard/users/users.component';
-
-
+import { HeaderComponent } from './Components/header/header.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { PopupComponent } from './Components/common/popup/popup.component';
 
 const MaterialComponents=[
   MatButtonModule,
@@ -35,7 +36,8 @@ const MaterialComponents=[
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatDialogModule
 ]
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ const MaterialComponents=[
     DashboardComponent,
     DataTableComponent,
     UsersComponent,
+    HeaderComponent,
+    PopupComponent,
   ],
   imports: [
     MaterialComponents,
@@ -54,8 +58,6 @@ const MaterialComponents=[
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-  
-    
   ],
   exports: [
     MaterialComponents

@@ -1,11 +1,32 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthService{
-    static user: String |null='user';
-   
-    static login(){
-        this.user='user';
+    private loggedIn = new BehaviorSubject<boolean>(false);
+    get isLoggedIn() {
+        return this.loggedIn.asObservable(); 
+      } 
+    constructor(){
+        if(this.getUser()){
+            this.loggedIn.next(true);
+        }
+    }  
+    login(user:any){
+        localStorage.setItem('user-auth',JSON.stringify(user));
+        this.loggedIn.next(true);
     }
-    static logout(){
-        this.user=null;
+    logout(){
+        localStorage.removeItem('user-auth');
+        this.loggedIn.next(false);
     }
-
+    getUser(){
+        const retrievedUser=localStorage.getItem('user-auth');
+        if(retrievedUser){
+            const user=JSON.parse(retrievedUser);
+            return user
+        }
+        return null;
+    }
   }

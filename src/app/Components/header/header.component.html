@@ -1,0 +1,8 @@
+<header>
+ <ul>
+    <li  *ngIf="(isLoggedIn$ | async)===false"><a routerLink="/login" routerLinkActive="active">Login</a></li>
+<li *ngIf="(isLoggedIn$ | async)===false"><a  routerLink="/signup" routerLinkActive="active">Signup</a></li>
+<li  *ngIf="isLoggedIn$ | async"><a  routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+<button *ngIf="isLoggedIn$ | async" mat-raised-button color="warn" (click)="logout()">logout</button>
+</ul>   
+</header>

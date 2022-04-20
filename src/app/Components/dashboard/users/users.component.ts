@@ -1,14 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CrudService,User } from '../../../shared/crud.service';
-import {SignupFormInterface} from '../../../FormInterface'
+import { CrudService,User } from '../../../services/crud.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
-interface UserInterface{
-  id: Number,
-  name: String
-}
 
 @Component({
   selector: 'app-users',
@@ -41,8 +36,6 @@ export class UsersComponent implements OnInit {
   }
   fetchUsers() {
     return this.crudService.getUsers().subscribe((res: User[]) => {
-       console.log('RESPONSE IS ', res);
-       //this.Users.push([...res]);
        this.dataSource = new MatTableDataSource(res);
     });
   }
